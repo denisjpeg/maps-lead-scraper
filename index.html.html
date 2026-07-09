@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Altunay Soft | LeadScout v2.5 — B2B Kurumsal Veri Motoru</title>
+
+<!-- 🚀 AKILLI SEO META ETİKETLERİ -->
+<meta name="description" content="Altunay Soft LeadScout v2.5 ile hedef sektörünüzdeki aktif işletmeleri, doğrulanmış e-posta ve telefon adresleriyle saniyeler içinde listeleyin ve Excel'e aktarın.">
+<meta name="keywords" content="b2b müşteri bulma, harita veri kazıma, lead generation, google maps mail scraper, altunay soft, seo veri madenciliği">
+<meta name="author" content="Altunay Soft">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0b0f19;
+    --bg-raised: #0f1524;
+    --indigo: #1e1b4b;
+    --cyan: #38bdf8;
+    --violet: #6366f1;
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --dim: #475569;
+    --line: rgba(255,255,255,0.07);
+    --line-bright: rgba(56,189,248,0.18);
+  }
+  *{ box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior: smooth; }
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  h1,h2,h3,h4{ font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
+
+  /* ---------- background atmosphere ---------- */
+  .atmosphere{
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -5%, rgba(99,102,241,0.20), transparent 60%),
+      radial-gradient(ellipse 800px 500px at 85% 10%, rgba(56,189,248,0.14), transparent 60%),
+      radial-gradient(ellipse 700px 600px at 50% 100%, rgba(30,27,75,0.5), transparent 70%);
+  }
+  .grid-veil{
+    position: fixed; inset:0; z-index:0; pointer-events:none; opacity:0.35;
+    background-image:
+      linear-gradient(rgba(56,189,248,0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(56,189,248,0.05) 1px, transparent 1px);
+    background-size: 46px 46px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black, transparent 75%);
+  }
+
+  section, header, footer{ position: relative; z-index: 1; }
+  .wrap{ max-width: 1180px; margin: 0 auto; padding: 0 32px; }
+
+  /* ---------- navbar ---------- */
+  nav{
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    background: rgba(11,15,25,0.55);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner{
+    max-width: 1180px; margin: 0 auto; padding: 16px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .brand{ display:flex; align-items:center; gap: 10px; }
+  .brand-mark{
+    width: 34px; height: 34px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--cyan), var(--violet));
+    display:flex; align-items:center; justify-content:center;
+    font-size: 16px; box-shadow: 0 6px 16px -4px rgba(56,189,248,0.6);
+  }
+  .brand-text{ display:flex; flex-direction:column; line-height: 1.1; }
+  .brand-text b{ font-family:'Plus Jakarta Sans'; font-weight:800; font-size: 15px; color:#fff; }
+  .brand-text span{ font-size: 11px; color: var(--cyan); font-weight:600; letter-spacing: 0.04em; }
+
+  .nav-actions{ display:flex; gap: 10px; align-items:center; }
+  .btn{
+    font-family:'Plus Jakarta Sans'; font-weight:700; font-size: 13.5px;
+    padding: 10px 20px; border-radius: 10px; cursor:pointer; border:none;
+    text-decoration:none; display:inline-flex; align-items:center; gap:6px;
+    transition: all 0.25s ease;
+  }
+  .btn-ghost{
+    color: var(--text); background: rgba(255,255,255,0.04);
+    border: 1px solid var(--line);
+  }
+  .btn-ghost:hover{ background: rgba(255,255,255,0.08); border-color: var(--line-bright); }
+  .btn-primary{
+    color: #fff; background: linear-gradient(90deg, var(--cyan), var(--violet));
+    box-shadow: 0 8px 20px -8px rgba(56,189,248,0.55);
+  }
+  .btn-primary:hover{ transform: translateY(-1px); box-shadow: 0 12px 26px -8px rgba(56,189,248,0.7); }
+
+  @media (max-width: 720px){
+    .btn-ghost-nav{ display:none; }
+  }
+
+  /* ---------- hero ---------- */
+  .hero{ padding: 168px 0 90px; text-align:center; }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:12.5px; font-weight:600; color: var(--cyan);
+    background: rgba(56,189,248,0.08); border:1px solid var(--line-bright);
+    padding: 7px 16px; border-radius: 999px; margin-bottom: 28px;
+  }
+  .pulse-dot{
+    width:6px; height:6px; border-radius:50%; background: var(--cyan);
+    box-shadow: 0 0 0 0 rgba(56,189,248,0.7);
+    animation: pulse 1.8s infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow: 0 0 0 0 rgba(56,189,248,0.6); }
+    70%{ box-shadow: 0 0 0 8px rgba(56,189,248,0); }
+    100%{ box-shadow: 0 0 0 0 rgba(56,189,248,0); }
+  }
+  .hero h1{
+    font-size: clamp(2.4rem, 5.4vw, 4.4rem);
+    font-weight: 800; line-height: 1.08; max-width: 900px; margin: 0 auto 22px;
+  }
+  .hero h1 .grad{
+    background: linear-gradient(90deg, #38bdf8, #818cf8 55%, #6366f1);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p.sub{
+    max-width: 640px; margin: 0 auto 40px; color: var(--muted);
+    font-size: 1.08rem; line-height: 1.65; font-weight: 500;
+  }
+  .hero-cta{ display:flex; gap: 14px; justify-content:center; flex-wrap: wrap; margin-bottom: 64px;}
+  .btn-lg{ padding: 15px 30px; font-size: 15px; border-radius: 12px; }
+
+  /* signature: radar / scan visual */
+  .scan-stage{
+    position: relative; max-width: 620px; margin: 0 auto; height: 200px;
+  }
+  .scan-ring{
+    position:absolute; top:50%; left:50%; transform: translate(-50%,-50%);
+    border: 1px solid rgba(56,189,248,0.25); border-radius: 50%;
+  }
+  .scan-ring.r1{ width: 160px; height:160px; }
+  .scan-ring.r2{ width: 320px; height:320px; opacity:0.6; }
+  .scan-ring.r3{ width: 480px; height:480px; opacity:0.3; }
+  .scan-sweep{
+    position:absolute; top:50%; left:50%; width:240px; height:240px;
+    transform: translate(-50%,-50%); border-radius:50%;
+    background: conic-gradient(from 0deg, rgba(56,189,248,0.35), transparent 35%);
+    animation: spin 3.2s linear infinite; mix-blend-mode: screen;
+  }
+  @keyframes spin{ to{ transform: translate(-50%,-50%) rotate(360deg); } }
+  .scan-node{
+    position:absolute; width:8px; height:8px; border-radius:50%;
+    background: var(--cyan); box-shadow: 0 0 12px 2px rgba(56,189,248,0.8);
+  }
+  .scan-label{
+    position:absolute; top:50%; left:50%; transform: translate(-50%,-50%);
+    font-family:'Plus Jakarta Sans'; font-weight:800; font-size: 13px; color:#fff;
+    background: rgba(11,15,25,0.85); border: 1px solid var(--line-bright);
+    padding: 8px 14px; border-radius: 10px; white-space:nowrap; letter-spacing: 0.02em;
+  }
+
+  /* ---------- section shared ---------- */
+  .section{ padding: 90px 0; }
+  .section-head{ text-align:center; max-width: 680px; margin: 0 auto 56px; }
+  .section-head .kicker{
+    font-size: 12.5px; font-weight:700; color: var(--violet); letter-spacing: 0.08em;
+    text-transform: uppercase; margin-bottom: 14px; display:block;
+  }
+  .section-head h2{ font-size: clamp(1.7rem, 3.4vw, 2.5rem); font-weight: 800; margin-bottom: 16px; }
+  .section-head p{ color: var(--muted); font-size: 1.02rem; line-height: 1.6; }
+
+  /* ---------- value cards ---------- */
+  .card-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  @media (max-width: 900px){ .card-grid{ grid-template-columns: 1fr; } }
+  .vcard{
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border: 1px solid var(--line); border-radius: 20px; padding: 32px 28px; transition: all 0.3s ease;
+  }
+  .vcard:hover{
+    border-color: var(--line-bright); transform: translateY(-4px);
+    box-shadow: 0 20px 40px -20px rgba(56,189,248,0.35);
+  }
+  .vcard .vicon{
+    width: 46px; height:46px; border-radius: 12px; margin-bottom: 20px;
+    display:flex; align-items:center; justify-content:center; font-size: 20px;
+    background: rgba(56,189,248,0.1); border: 1px solid var(--line-bright);
+  }
+  .vcard h3{ font-size: 1.12rem; font-weight:700; margin-bottom: 12px; color:#fff; }
+  .vcard p{ color: var(--muted); font-size: 0.93rem; line-height: 1.65; }
+  .vcard .tag{
+    display:inline-block; margin-top:16px; font-size:11px; font-weight:700;
+    color: var(--cyan); letter-spacing: 0.04em; text-transform: uppercase;
+  }
+
+  /* ---------- demo / terminal section ---------- */
+  .demo-frame-wrap{
+    background: rgba(15,23,42,0.55); border: 1px solid var(--line-bright);
+    border-radius: 26px; padding: 8px;
+    box-shadow: 0 30px 60px -25px rgba(56,189,248,0.3), inset 0 0 0 1px rgba(255,255,255,0.02);
+  }
+  .demo-head{
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap: 16px;
+    padding: 22px 26px 20px;
+  }
+  .demo-head-left{ display:flex; align-items:center; gap:12px; }
+  .status-chip{
+    display:flex; align-items:center; gap:8px; font-size:12px; font-weight:700;
+    color:#4ade80; background: rgba(74,222,128,0.08); border:1px solid rgba(74,222,128,0.25);
+    padding: 6px 12px; border-radius: 999px;
+  }
+  .status-chip .dot{ width:6px; height:6px; border-radius:50%; background:#4ade80; animation: pulse2 1.6s infinite; }
+  @keyframes pulse2{ 0%{opacity:1;} 50%{opacity:0.3;} 100%{opacity:1;} }
+  .demo-head h3{ font-size: 1.05rem; font-weight: 800; color:#fff; }
+  .demo-head .traffic{ display:flex; gap:7px; }
+  .traffic span{ width:11px; height:11px; border-radius:50%; display:block; }
+  .traffic .r{ background:#ef4444; } .traffic .y{ background:#eab308; } .traffic .g{ background:#22c55e; }
+
+  .demo-note{ padding: 0 26px 22px; }
+  .demo-note p{ color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+  .demo-note b{ color: #e2e8f0; }
+  .plan-row{ display:flex; gap:12px; margin-top:16px; flex-wrap:wrap; }
+  .plan-pill{
+    flex:1; min-width: 220px; border-radius: 14px; padding: 14px 16px;
+    border: 1px solid var(--line); background: rgba(255,255,255,0.02);
+  }
+  .plan-pill.on{ border-color: var(--line-bright); background: rgba(56,189,248,0.06); }
+  .plan-pill .ptitle{ font-family:'Plus Jakarta Sans'; font-weight:800; font-size:13.5px; margin-bottom:4px; color:#fff; }
+  .plan-pill.on .ptitle{ color: var(--cyan); }
+  .plan-pill p{ font-size: 12.5px; color: var(--muted); }
+
+  .iframe-shell{ padding: 24px 8px 8px; }
+  .terminal-box {
+    padding: 48px 24px; text-align: center; background: #05070d; border-radius: 20px;
+    border: 1px dashed rgba(56,189,248,0.2); box-shadow: inset 0 0 20px rgba(0,0,0,0.6);
+  }
+
+  /* ---------- footer ---------- */
+  footer{ padding: 70px 0 40px; border-top: 1px solid var(--line); margin-top: 40px; }
+  .footer-inner{ text-align:center; }
+  .footer-brand{ display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom: 18px; }
+  .foot-links{ display:flex; gap: 22px; justify-content:center; margin-bottom: 26px; flex-wrap:wrap; }
+  .foot-links a{ color: var(--muted); font-size: 13px; text-decoration:none; font-weight:600; transition: color 0.2s; }
+  .foot-links a:hover{ color: var(--cyan); }
+  .foot-social{ display:flex; gap:12px; justify-content:center; margin-bottom: 30px; }
+  .foot-social a{
+    width: 38px; height:38px; border-radius: 10px; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; color: var(--muted);
+    text-decoration:none; transition: all 0.2s; font-size: 15px;
+  }
+  .foot-social a:hover{ border-color: var(--line-bright); color: var(--cyan); background: rgba(56,189,248,0.06); }
+  .copyright{ color: var(--dim); font-size: 12.5px; font-weight:500; }
+  .copyright a{ color: var(--cyan); text-decoration:none; font-weight:700; }
+  .copyright a:hover{ text-decoration: underline; }
+
+  ::selection{ background: rgba(56,189,248,0.35); }
+  a:focus-visible, button:focus-visible{ outline: 2px solid var(--cyan); outline-offset: 3px; }
+</style>
+</head>
+<body>
+
+<div class="atmosphere"></div>
+<div class="grid-veil"></div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="brand">
+      <div class="brand-mark">⚡</div>
+      <div class="brand-text">
+        <b>Altunay Soft</b>
+        <span>LEADSCOUT v2.5</span>
+      </div>
+    </div>
+    <div class="nav-actions">
+      <a href="#istasyon" class="btn btn-ghost btn-ghost-nav">Giriş Yap</a>
+      <a href="https://denizaltny.com" target="_blank" class="btn btn-primary">İletişime Geç</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow"><span class="pulse-dot"></span> Canlı veri motoru aktif</div>
+    <h1>B2B Satış Ekiplerinizin <span class="grad">Zamanını Boşa Harcamayı</span> Bırakın.</h1>
+    <p class="sub">Potansiyel müşterilerinizi Google'da saatlerce manuel aramayın. Sektörünüzdeki aktif işletmeleri, doğrulanabilir iletişim bilgileriyle saniyeler içinde Excel'e aktarın.</p>
+    <div class="hero-cta">
+      <!-- 🚀 ÇALIŞMAYAN LİNKİN DÜZELTİLDİĞİ YER (DOĞRUDAN #istasyon HEDEFİNE BAĞLANDI) -->
+      <a href="#istasyon" class="btn btn-primary btn-lg">🚀 Ücretsiz Taramayı Başlat</a>
+      <a href="#neden" class="btn btn-ghost btn-lg">Nasıl Çalışır?</a>
+    </div>
+
+    <div class="scan-stage" aria-hidden="true">
+      <div class="scan-ring r3"></div>
+      <div class="scan-ring r2"></div>
+      <div class="scan-ring r1"></div>
+      <div class="scan-sweep"></div>
+      <div class="scan-node" style="top:30%; left:62%;"></div>
+      <div class="scan-node" style="top:65%; left:70%;"></div>
+      <div class="scan-node" style="top:70%; left:35%;"></div>
+      <div class="scan-node" style="top:35%; left:28%;"></div>
+      <div class="scan-label">📍 İstanbul • 128 işletme taranıyor</div>
+    </div>
+  </div>
+</header>
+
+<section class="section" id="neden">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Neden LeadScout</span>
+      <h2>Müşteri Bulmak ve SEO Neden Önemlidir?</h2>
+      <p>Doğru veri, sadece bir satış listesi değil; büyüme stratejinizin temel taşıdır.</p>
+    </div>
+    <div class="card-grid">
+      <div class="vcard">
+        <div class="vicon">🎯</div>
+        <h3>Organik Büyüme &amp; SEO Katalizörü</h3>
+        <p>Doğru B2B datası, dijital pazarlamanın kalbidir. Bu sistemle elde ettiğiniz niş işletme listeleri sayesinde, web sitenizin SEO yapısını — bölgesel anahtar kelimeler, yerel backlink stratejileri ve sektörel içerik haritaları — mükemmel şekilde beslersiniz. Doğru kitleyi hedeflemek, arama motorlarında organik olarak en tepeye çıkmanın ilk adımıdır.</p>
+        <span class="tag">Kritik Önem</span>
+      </div>
+      <div class="vcard">
+        <div class="vicon">📞</div>
+        <h3>Outbound Sales &amp; Soğuk Satışın Gücü</h3>
+        <p>Dünyanın en iyi ürününe veya web tasarımına sahip olsanız bile, kimsenin bundan haberi yoksa cironuz sıfırdır. Sektörünüzdeki karar vericilere doğrudan ulaşarak satış süreçlerinizi otomatize edin.</p>
+        <span class="tag">Outbound</span>
+      </div>
+      <div class="vcard">
+        <div class="vicon">⏱️</div>
+        <h3>Muazzam Zaman ve Maliyet Tasarrufu</h3>
+        <p>Bir personelin günlerce manuel yapacağı pazar araştırmasını, Altunay Soft'un gelişmiş veri kazıma algoritmaları dakikalar içinde düzenli bir Excel listesine dönüştürür.</p>
+        <span class="tag">Verimlilik</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ⚡ ID DEĞERİ "istasyon" OLARAK SABİTLENDİ (BUTON ARTIK BURAYA KAYACAK) -->
+<section class="section" id="istasyon">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="kicker">Canlı Demo İstasyonu</span>
+      <h2>LeadScout v2.5 Canlı Demo İstasyonu</h2>
+      <p>Aşağıdaki panel doğrudan tarama motorumuza bağlıdır. Sektörünüzünü girerek anında müşteri datası üretin.</p>
+    </div>
+
+    <div class="demo-frame-wrap">
+      <div class="demo-head">
+        <div class="demo-head-left">
+          <div class="traffic"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+          <h3>leadscout-engine.altunaysoft.com</h3>
+        </div>
+        <div class="status-chip"><span class="dot"></span> Sunucu Çevrimiçi</div>
+      </div>
+      <div class="demo-note">
+        <p><b>Ücretsiz sürüm:</b> İstanbul lokasyonunda, ilk 5 sonuçla sınırlı hızlı bir tarama sunar — sistemin gücünü görmeniz için idealdir. <b>Kurumsal giriş</b> yaptığınızda sınırsız il/ilçe seçimi, çoklu sayfa derinliği ve tam liste indirme hakları alt panelde açılır.</p>
+        <div class="plan-row">
+          <div class="plan-pill">
+            <div class="ptitle">🔓 Standart Mod</div>
+            <p>İstanbul lokasyonu · İlk 5 sonuç · Tek sayfa tarama</p>
+          </div>
+          <div class="plan-pill on">
+            <div class="ptitle">👑 Premium Mod</div>
+            <p>Global ülke/il seçimi · 5 sayfaya kadar derinlik · Sınırsız indirme</p>
+          </div>
+        </div>
+      </div>
+      
+      <div class="iframe-shell">
+        <div class="terminal-box">
+          <p style="color: #94a3b8; margin-bottom: 24px; font-size: 1.1rem; font-weight: 500;">Tarama motorunu maksimum hızda, güvenli ve tam ekran modunda çalıştırmak için veri istasyonuna bağlanın.</p>
+          
+          <!-- https://maps-lead-scraper.streamlit.app/ -->
+          <a href="https://denizaltny-maps-lead-scraper.streamlit.app" target="_blank" class="btn btn-primary btn-lg" style="box-shadow: 0 0 35px rgba(56, 189, 248, 0.35); padding: 16px 36px;">
+            🚀 LeadScout Veri Terminalini Başlat
+          </a>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap footer-inner">
+    <div class="footer-brand">
+      <div class="brand-mark">⚡</div>
+      <b style="font-family:'Plus Jakarta Sans'; font-weight:800; font-size:16px;">Altunay Soft</b>
+    </div>
+    <div class="foot-links">
+      <a href="#neden">Neden LeadScout</a>
+      <a href="#istasyon">Canlı Demo</a>
+      <a href="https://denizaltny.com" target="_blank">İletişim</a>
+    </div>
+    <div class="foot-social">
+      <a href="https://denizaltny.com" target="_blank" aria-label="Web sitesi">🌐</a>
+      <a href="mailto:info@altunaysoft.com" aria-label="E-posta">✉️</a>
+      <a href="https://denizaltny.com" target="_blank" aria-label="LinkedIn">in</a>
+    </div>
+    <p class="copyright">© 2026 Altunay Soft Data Analytics Suite • Tüm Hakları Saklıdır.<br>
+      Powered by <a href="https://denizaltny.com" target="_blank">Deniz</a>
+    </p>
+  </div>
+</footer>
+
+</body>
+</html>
