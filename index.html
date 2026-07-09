@@ -3,220 +3,269 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Altunay Soft | LeadScout v2.5 — B2B Kurumsal Veri Motoru</title>
+<title>Altunay Soft | LeadScout v2.5</title>
 <meta name="description" content="Altunay Soft LeadScout v2.5 ile hedef sektörünüzdeki aktif işletmeleri, doğrulanmış e-posta ve telefon adresleriyle saniyeler içinde listeleyin ve Excel'e aktarın.">
 <meta name="keywords" content="b2b müşteri bulma, harita veri kazıma, lead generation, google maps mail scraper, altunay soft">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
   :root{
-    --bg: #0b0f19; --bg-raised: #0f1524; --indigo: #1e1b4b; --cyan: #38bdf8;
-    --violet: #6366f1; --text: #f8fafc; --muted: #94a3b8; --dim: #475569;
-    --line: rgba(255,255,255,0.07); --line-bright: rgba(56,189,248,0.18);
+    --bg: #0b0f19; --bg-raised: #0f1524; --cyan: #38bdf8; --violet: #6366f1;
+    --text: #f8fafc; --muted: #94a3b8; --line: rgba(255,255,255,0.07);
+    --line-bright: rgba(56,189,248,0.18); --dim: #475569;
   }
   *{ box-sizing: border-box; margin:0; padding:0; }
   html{ scroll-behavior: smooth; }
   body{ background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
   h1,h2,h3,h4{ font-family: 'Plus Jakarta Sans', sans-serif; letter-spacing: -0.02em; }
-  .atmosphere{ position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 900px 500px at 15% -5%, rgba(99,102,241,0.20), transparent 60%), radial-gradient(ellipse 800px 500px at 85% 10%, rgba(56,189,248,0.14), transparent 60%); }
-  section, header, footer{ position: relative; z-index: 1; }
+  
+  /* Arka Plan Atmosferi */
+  .atmosphere{ position: fixed; inset: 0; z-index: 0; pointer-events: none; background: radial-gradient(ellipse 900px 500px at 15% -5%, rgba(99,102,241,0.15), transparent 60%), radial-gradient(ellipse 800px 500px at 85% 10%, rgba(56,189,248,0.1), transparent 60%); }
+  .grid-veil{ position: fixed; inset:0; z-index:0; pointer-events:none; opacity:0.35; background-image: linear-gradient(rgba(56,189,248,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(56,189,248,0.05) 1px, transparent 1px); background-size: 46px 46px; mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, black, transparent 75%); }
+  section, header, footer, nav{ position: relative; z-index: 1; }
   .wrap{ max-width: 1180px; margin: 0 auto; padding: 0 32px; }
   
   /* Navbar */
   nav{ position: fixed; top: 0; left: 0; right: 0; z-index: 50; background: rgba(11,15,25,0.55); backdrop-filter: blur(18px); border-bottom: 1px solid var(--line); }
   .nav-inner{ max-width: 1180px; margin: 0 auto; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; }
-  .brand{ display:flex; align-items:center; gap: 10px; }
-  .brand-mark{ width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, var(--cyan), var(--violet)); display:flex; align-items:center; justify-content:center; font-size: 16px; }
-  .brand-text b { font-weight:800; color:#fff; } .brand-text span { font-size:11px; color:var(--cyan); }
+  .brand{ display:flex; align-items:center; gap: 10px; font-weight: 800; color: #fff; }
   
-  /* UI Elements */
+  /* Butonlar */
   .btn{ font-family:'Plus Jakarta Sans'; font-weight:700; font-size: 13.5px; padding: 12px 24px; border-radius: 10px; cursor:pointer; border:none; text-decoration:none; display: block; text-align: center; transition: all 0.25s ease; }
   .btn-primary{ color: #fff; background: linear-gradient(90deg, var(--cyan), var(--violet)); box-shadow: 0 8px 20px -8px rgba(56,189,248,0.55); }
   .btn-primary:hover{ transform: translateY(-1px); }
   .btn-ghost{ color: var(--text); background: rgba(255,255,255,0.04); border: 1px solid var(--line); }
   
-  /* Hero */
-  .hero{ padding: 168px 0 60px; text-align:center; }
+  /* Hero Bölümü */
+  .hero{ padding: 168px 0 50px; text-align:center; }
   .hero h1{ font-size: clamp(2.4rem, 5.4vw, 4.4rem); font-weight: 800; line-height: 1.08; max-width: 900px; margin: 0 auto 22px; }
   .hero h1 .grad{ background: linear-gradient(90deg, #38bdf8, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
   .hero p.sub{ max-width: 640px; margin: 0 auto 40px; color: var(--muted); font-size: 1.08rem; line-height: 1.65; }
-  .hero-cta{ display:grid; grid-template-columns: repeat(2, 220px); gap: 14px; justify-content:center; margin-bottom: 64px;}
-  
-  /* Forms & Cards */
-  .demo-frame-wrap{ background: rgba(15,23,42,0.55); border: 1px solid var(--line-bright); border-radius: 26px; padding: 24px; box-shadow: 0 30px 60px -25px rgba(56,189,248,0.3); }
+  .hero-cta{ display:grid; grid-template-columns: repeat(2, 220px); gap: 14px; justify-content:center; margin-bottom: 40px;}
+  .btn-lg{ padding: 15px 30px; font-size: 15px; border-radius: 12px; width: 100%; }
+
+  /* 🎯 RADAR/SCAN ANIMASYONU GRUBU */
+  .scan-stage{ position: relative; max-width: 620px; margin: 0 auto; height: 160px; }
+  .scan-ring{ position:absolute; top:50%; left:50%; transform: translate(-50%,-50%); border: 1px solid rgba(56,189,248,0.25); border-radius: 50%; }
+  .scan-ring.r1{ width: 120px; height:120px; }
+  .scan-ring.r2{ width: 240px; height:240px; opacity:0.6; }
+  .scan-ring.r3{ width: 360px; height:360px; opacity:0.3; }
+  .scan-sweep{ position:absolute; top:50%; left:50%; width:180px; height:180px; transform: translate(-50%,-50%); border-radius:50%; background: conic-gradient(from 0deg, rgba(56,189,248,0.35), transparent 35%); animation: spin 3.2s linear infinite; mix-blend-mode: screen; }
+  @keyframes spin{ to{ transform: translate(-50%,-50%) rotate(360deg); } }
+  .scan-node{ position:absolute; width:8px; height:8px; border-radius:50%; background: var(--cyan); box-shadow: 0 0 12px 2px rgba(56,189,248,0.8); }
+  .scan-label{ position:absolute; top:50%; left:50%; transform: translate(-50%,-50%); font-family:'Plus Jakarta Sans'; font-weight:800; font-size: 13px; color:#fff; background: rgba(11,15,25,0.85); border: 1px solid var(--line-bright); padding: 8px 14px; border-radius: 10px; white-space:nowrap; letter-spacing: 0.02em; }
+
+  /* ---------- Stratejik Bilgilendirme Kartları ---------- */
+  .section{ padding: 60px 0; }
+  .section-head{ text-align:center; max-width: 680px; margin: 0 auto 40px; }
+  .section-head .kicker{ font-size: 12.5px; font-weight:700; color: var(--violet); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px; display:block; }
+  .section-head h2{ font-size: clamp(1.7rem, 3.4vw, 2.5rem); font-weight: 800; margin-bottom: 14px; }
+  .section-head p{ color: var(--muted); font-size: 1.02rem; line-height: 1.6; }
+  .card-grid{ display:grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  @media (max-width: 900px){ .card-grid{ grid-template-columns: 1fr; } }
+  .vcard{ background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01)); border: 1px solid var(--line); border-radius: 20px; padding: 32px 28px; transition: all 0.3s ease; text-align: left; }
+  .vcard:hover{ border-color: var(--line-bright); transform: translateY(-4px); box-shadow: 0 20px 40px -20px rgba(56,189,248,0.35); }
+  .vcard .vicon{ width: 46px; height:46px; border-radius: 12px; margin-bottom: 20px; display:flex; align-items:center; justify-content:center; font-size: 20px; background: rgba(56,189,248,0.1); border: 1px solid var(--line-bright); }
+  .vcard h3{ font-size: 1.12rem; font-weight:700; margin-bottom: 12px; color:#fff; }
+  .vcard p{ color: var(--muted); font-size: 0.93rem; line-height: 1.65; }
+  .vcard .tag{ display:inline-block; margin-top:16px; font-size:11px; font-weight:700; color: var(--cyan); letter-spacing: 0.04em; text-transform: uppercase; }
+
+  /* Paneller & Tablolar */
+  .panel-box{ background: rgba(15,23,42,0.6); border: 1px solid var(--line); border-radius: 20px; padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); margin-bottom: 24px; }
   .input-group { margin-bottom: 16px; text-align: left; }
   .input-group label { display: block; font-size: 12px; font-weight: 600; color: var(--cyan); margin-bottom: 6px; }
-  .input-field { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.03); border: 1px solid var(--line); border-radius: 10px; color: #fff; font-size: 14px; transition: border 0.2s; }
+  .input-field { width: 100%; padding: 14px; background: rgba(255,255,255,0.02); border: 1px solid var(--line); border-radius: 10px; color: #fff; font-size: 14px; }
   .input-field:focus { border-color: var(--cyan); outline: none; }
   
-  /* Tables */
-  .table-container { width: 100%; overflow-x: auto; margin-top: 24px; border-radius: 12px; border: 1px solid var(--line); }
+  .table-container { width: 100%; overflow-x: auto; margin-top: 20px; border-radius: 10px; border: 1px solid var(--line); }
   table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13.5px; }
-  th { background: rgba(255,255,255,0.04); color: var(--cyan); padding: 14px; font-weight: 600; }
-  td { padding: 14px; border-bottom: 1px solid var(--line); color: #e2e8f0; }
-  tr:last-child td { border: none; }
+  th { background: rgba(255,255,255,0.03); color: var(--cyan); padding: 12px; }
+  td { padding: 12px; border-bottom: 1px solid var(--line); color: #e2e8f0; }
   
-  .footer { text-align: center; color: #475569; margin-top: 50px; padding: 40px 0; font-size: 13px; border-top: 1px solid var(--line); }
-  .footer a { color: var(--cyan); text-decoration: none; font-weight: 600; }
+  .premium-col { display: none; }
+  .footer { text-align: center; color: #475569; padding: 40px 0; font-size: 13px; border-top: 1px solid var(--line); margin-top: 40px; }
+  .footer a { color: var(--cyan); text-decoration: none; font-weight: 700; }
 </style>
 </head>
 <body>
 
 <div class="atmosphere"></div>
+<div class="grid-veil"></div>
 
 <nav>
   <div class="nav-inner">
-    <div class="brand">
-      <div class="brand-mark">⚡</div>
-      <div class="brand-text"><b>Altunay Soft</b><span>LEADSCOUT v2.5</span></div>
-    </div>
-    <a href="https://denizaltny.com" target="_blank" class="btn btn-primary">İletişime Geç</a>
+    <div class="brand">⚡ Altunay Soft</div>
+    <a href="https://denizaltny.com" target="_blank" class="btn btn-primary" style="padding: 8px 16px;">İletişim</a>
   </div>
 </nav>
 
 <header class="hero">
   <div class="wrap">
-    <h1>B2B Satış Ekiplerinizin <span class="grad">Zamanını Boşa Harcamayı</span> Bırakın.</h1>
-    <p class="sub">Potansiyel müşterilerinizi Google'da saatlerce manuel aramayın. Sektörünüzdeki aktif işletmeleri saniyeler içinde Excel'e aktarın.</p>
+    <h1>B2B Müşterilerinizi <span class="grad">Saniyeler İçinde</span> Listeleyin</h1>
+    <p class="sub">Hedef sektörünüzü yazın, aktif kurumsal işletmeleri ve doğrulanmış iletişim kanallarını anında önünüze serelim.</p>
     <div class="hero-cta">
-      <a href="#istasyon" class="btn btn-primary">🚀 Taramayı Başlat</a>
-      <a href="https://denizaltny.com" target="_blank" class="btn btn-ghost">Bize Ulaşın</a>
+      <a href="#istasyon" class="btn btn-primary btn-lg">🚀 Taramayı Başlat</a>
+      <a href="#neden" class="btn btn-ghost btn-lg">Nasıl Çalışır?</a>
+    </div>
+
+    <!-- 🎯 GERİ GELEN FUTURISTIK RADAR ANIMASYONU -->
+    <div class="scan-stage" aria-hidden="true">
+      <div class="scan-ring r3"></div>
+      <div class="scan-ring r2"></div>
+      <div class="scan-ring r1"></div>
+      <div class="scan-sweep"></div>
+      <div class="scan-node" style="top:30%; left:62%;"></div>
+      <div class="scan-node" style="top:65%; left:70%;"></div>
+      <div class="scan-node" style="top:70%; left:35%;"></div>
+      <div class="scan-node" style="top:35%; left:28%;"></div>
+      <div class="scan-label">📍 İstanbul • İşletme veritabanı aktif</div>
     </div>
   </div>
 </header>
 
-<section class="section" id="istasyon">
+<!-- 🎯 GERİ GELEN STRATEJİK AÇIKLAMA KARTLARI (NEDEN BİZ / İŞLETMENİZİ NASIL GELİŞTİRİR) -->
+<section class="section" id="neden">
   <div class="wrap">
-    <div class="demo-frame-wrap">
-      <h3 style="color: #fff; margin-bottom: 20px;">🛰️ LeadScout Canlı Veri İstasyonu</h3>
-      
-      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; background: rgba(255,255,255,0.02); padding: 16px; border-radius: 12px; margin-bottom: 20px;">
-        <div class="input-group">
-          <label>Premium E-Posta (Opsiyonel)</label>
-          <input type="email" id="api_email" class="input-field" placeholder="deniz@altunaysoft.com">
-        </div>
-        <div class="input-group">
-          <label>Premium Şifre (Opsiyonel)</label>
-          <input type="password" id="api_pass" class="input-field" placeholder="••••••••">
-        </div>
+    <div class="section-head">
+      <span class="kicker">Neden LeadScout</span>
+      <h2>Müşteri Bulmak ve SEO Neden Önemlidir?</h2>
+      <p>Doğru veri, sadece bir satış listesi değil; büyüme stratejinizin temel taşıdır.</p>
+    </div>
+    <div class="card-grid">
+      <div class="vcard">
+        <div class="vicon">🎯</div>
+        <h3>Organik Büyüme &amp; SEO Katalizörü</h3>
+        <p>Doğru B2B datası, dijital pazarlamanın kalbidir. Bu sistemle elde ettiğiniz niş işletme listeleri sayesinde, web sitenizin SEO yapısını — bölgesel anahtar kelimeler, yerel backlink stratejileri ve sektörel içerik haritaları — mükemmel şekilde beslersiniz. Doğru kitleyi hedeflemek, arama motorlarında organik olarak en tepeye çıkmanın ilk adımıdır.</p>
+        <span class="tag">Kritik Önem</span>
       </div>
-
-      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
-        <div class="input-group">
-          <label>🌍 Ülke (Sadece Premium)</label>
-          <input type="text" id="api_country" class="input-field" value="Türkiye">
-        </div>
-        <div class="input-group">
-          <label>🏙️ İl (Sadece Premium)</label>
-          <input type="text" id="api_city" class="input-field" value="İstanbul">
-        </div>
-        <div class="input-group">
-          <label>📍 İlçe (Sadece Premium)</label>
-          <input type="text" id="api_district" class="input-field" placeholder="Kadıköy">
-        </div>
+      <div class="vcard">
+        <div class="vicon">📞</div>
+        <h3>Outbound Sales &amp; Soğuk Satışın Gücü</h3>
+        <p>Dünyanın en iyi ürününe veya web tasarımına sahip olsanız bile, kimsenin bundan haberi yoksa cironuz sıfırdır. Sektörünüzdeki karar vericilere doğrudan ulaşarak satış süreçlerinizi otomatize edin.</p>
+        <span class="tag">Outbound</span>
       </div>
-
-      <div class="input-group" style="margin-top: 10px;">
-        <label>🔍 Bulmak İstediğiniz Sektör / Kelime</label>
-        <input type="text" id="api_keyword" class="input-field" placeholder="Örn: Lojistik, Tekstil, Fabrika, Klinik">
-      </div>
-
-      <button onclick="startScrape()" class="btn btn-primary" style="width: 100%; margin-top: 10px;" id="searchBtn">Müşteri Verilerini Listele 🔍</button>
-
-      <div id="loadingText" style="display:none; color: var(--cyan); margin-top: 15px; font-weight: 600;">⚡ Veri motoru haritaları tarıyor, lütfen bekleyin...</div>
-
-      <div id="resultBox" style="display: none;">
-        <div class="table-container">
-          <table id="leadsTable">
-            <thead>
-              <tr>
-                <th>İşletme Adı</th>
-                <th>Telefon</th>
-                <th>Kurumsal E-Posta</th>
-                <th>Web Sitesi</th>
-                <th>Konum</th>
-              </tr>
-            </thead>
-            <tbody></tbody>
-          </table>
-        </div>
-        <button onclick="downloadCSV()" class="btn btn-ghost" style="width: 100%; margin-top: 15px; border-color: #4ade80; color: #4ade80;">📥 Excel Listesini İndir (CSV)</button>
+      <div class="vcard">
+        <div class="vicon">⏱️</div>
+        <h3>Muazzam Zaman ve Maliyet Tasarrufu</h3>
+        <p>Bir personelin günlerce manuel yapacağı pazar araştırmasını, Altunay Soft'un gelişmiş veri kazıma algoritmaları dakikalar içinde düzenli bir Excel listesine dönüştürür.</p>
+        <span class="tag">Verimlilik</span>
       </div>
     </div>
   </div>
 </section>
 
+<section class="wrap" id="istasyon">
+  <div class="panel-box">
+    <h2 style="font-size: 18px; margin-bottom: 16px; color:#fff;">🛰️ LeadScout Canlı Veri İstasyonu</h2>
+    <!-- ARAMA ALANI -->
+    <div class="input-group">
+      <label>🔍 Bulmak İstediğiniz Sektör veya İşletme Türü</label>
+      <input type="text" id="keyword" class="input-field" placeholder="Örn: Tekstil Fabrikası, Lojistik, Klinik, Otomotiv">
+    </div>
+    <button onclick="runScraper()" class="btn btn-primary" style="width: 100%;" id="actionBtn">Müşteri Verilerini Derle 🔍</button>
+    <div id="loading" style="display:none; color: var(--cyan); margin-top: 12px; font-weight: 600; text-align: center;">⚡ Veri motoru haritaları tarıyor, lütfen bekleyin...</div>
+
+    <!-- SONUÇ TABLOSU -->
+    <div id="resultsWrapper" style="display: none;">
+      <div class="table-container">
+        <table id="resultsTable">
+          <thead>
+            <tr>
+              <th>İşletme Adı</th>
+              <th>Telefon</th>
+              <th>Konum</th>
+              <th class="premium-col">Kurumsal E-Posta</th>
+              <th class="premium-col">Web Sitesi</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button onclick="exportCSV()" class="btn btn-ghost" style="width: 100%; margin-top: 12px; border-color: #4ade80; color: #4ade80;">📥 Excel Listesini İndir (CSV)</button>
+    </div>
+  </div>
+
+  <!-- SORGUNUN ALTINDAKİ PREMIUM GİRİŞ PANELİ -->
+  <div class="panel-box" style="margin-top: 20px;">
+    <h3 style="font-size: 15px; color: #fff; margin-bottom: 12px;">🔑 Altunay Soft Yetkili Erişimi</h3>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;">
+      <input type="email" id="email" class="input-field" placeholder="E-Posta Adresiniz">
+      <input type="password" id="pass" class="input-field" placeholder="Şifreniz">
+    </div>
+    <p style="font-size: 11px; color: var(--muted); margin-top: 8px;">Hesabınız yoksa veya kısıtlamaları kaldırmak istiyorsanız <a href="https://denizaltny.com" target="_blank" style="color:var(--cyan)">Deniz</a> ile iletişime geçin.</p>
+  </div>
+</section>
+
 <script>
-let lastResults = [];
+let leadsData = [];
 
-async function startScrape() {
-  const keyword = document.getElementById("api_keyword").value;
-  if(!keyword) { alert("Lütfen bir sektör kelimesi girin!"); return; }
+async function runScraper() {
+  const kw = document.getElementById("keyword").value;
+  if(!kw) { alert("Lütfen bir sektör girin!"); return; }
 
-  document.getElementById("loadingText").style.display = "block";
-  document.getElementById("resultBox").style.display = "none";
-  document.getElementById("searchBtn").disabled = true;
+  document.getElementById("loading").style.display = "block";
+  document.getElementById("resultsWrapper").style.display = "none";
+  document.getElementById("actionBtn").disabled = true;
 
-  const payload = {
-    keyword: keyword,
-    country: document.getElementById("api_country").value,
-    city: document.getElementById("api_city").value,
-    district: document.getElementById("api_district").value,
-    email: document.getElementById("api_email").value,
-    password: document.getElementById("api_pass").value
-  };
+  const mailVal = document.getElementById("email").value;
+  const passVal = document.getElementById("pass").value;
 
   try {
-    // 👑 BURAYA PYTHON API'Nİ YAYINLADIĞINDA ALACAĞIN HEDEF URL'Yİ YAZACAKSIN
-    //Örn:  https://altunay-soft-api.onrender.com/api/scrape
-    const response = await fetch("https://altunay-soft-api.onrender.com", {
+    // ⚠️ KENDİ CANLI RENDER LİNKİNİ BURAYA YAPIŞTIR (Sonuna /api/scrape eklemeyi unutma)
+    const response = await fetch("https://altunay-soft-api.onrender.com/api/scrape", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({ keyword: kw, email: mailVal, password: passVal })
     });
 
-    const resData = await response.json();
-    if(resData.status === "success") {
-      lastResults = resData.data;
-      const tbody = document.querySelector("#leadsTable tbody");
+    const result = await response.json();
+    
+    if(result.status === "success") {
+      leadsData = result.data;
+      const isPremium = result.is_premium;
+      
+      const premCols = document.querySelectorAll(".premium-col");
+      premCols.forEach(col => col.style.display = isPremium ? "table-cell" : "none");
+
+      const tbody = document.querySelector("#resultsTable tbody");
       tbody.innerHTML = "";
 
-      lastResults.forEach(lead => {
+      leadsData.forEach(lead => {
         let row = `<tr>
           <td><b>${lead.title}</b></td>
           <td>${lead.phone}</td>
-          <td><span style="color:#4ade80">${lead.email}</span></td>
-          <td><a href="${lead.website}" target="_blank" style="color:var(--cyan)">Link</a></td>
           <td>${lead.address}</td>
+          <td class="premium-col" style="display:${isPremium ? 'table-cell' : 'none'}; color:#4ade80">${lead.email}</td>
+          <td class="premium-col" style="display:${isPremium ? 'table-cell' : 'none'}"><a href="${lead.website}" target="_blank" style="color:var(--cyan)">Git</a></td>
         </tr>`;
         tbody.innerHTML += row;
       });
 
-      document.getElementById("resultBox").style.display = "block";
+      document.getElementById("resultsWrapper").style.display = "block";
     } else {
-      alert("Sistem tarama hatası verdi.");
+      alert("Tarama motoru yanıt vermedi.");
     }
-  } catch (error) {
-    alert("API Sunucusuna bağlanılamadı. Kodlarınızı canlıya aldığınızdan emin olun.");
+  } catch (err) {
+    alert("API bağlantı hatası. Lütfen Render linkinizi kontrol edin.");
   } finally {
-    document.getElementById("loadingText").style.display = "none";
-    document.getElementById("searchBtn").disabled = false;
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("actionBtn").disabled = false;
   }
 }
 
-function downloadCSV() {
-  let csvContent = "\ufeffİşletme Adı,Telefon,Kurumsal E-Posta,Web Sitesi,Adres\n";
-  lastResults.forEach(lead => {
-    csvContent += `"${lead.title}","${lead.phone}","${lead.email}","${lead.website}","${lead.address}"\n`;
+function exportCSV() {
+  let csv = "\ufeffİşletme Adı,Telefon,Adres,E-Posta,Web Sitesi\n";
+  leadsData.forEach(l => {
+    csv += `"${l.title}","${l.phone}","${l.address}","${l.email}","${l.website}"\n`;
   });
-  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.setAttribute("href", url);
-  link.setAttribute("download", "altunay_soft_leads.csv");
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "leadscout_export.csv";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
 }
 </script>
 
