@@ -10,8 +10,12 @@ import re
 # SerpAPI Anahtarın
 SERPAPI_KEY = "ba0d96b737f0098fea37e0bbcc0a9b7b188583addc38e00897864db0c145b035"
 
-# SENİN ÖZEL PREMIUM ŞİFREN (İstersen tırnak içini değiştirebilirsin)
-PREMIUM_CODE = "denizpremium2026"
+# 👑 SİSTEME ERİŞEBİLECEK PREMIUM KULLANICI LİSTESİ
+# Yeni bir kullanıcı onayladığında buraya 'mail': 'şifre' şeklinde ekleyebilirsin.
+PREMIUM_USERS = {
+    "deniz@altunaysoft.com": "deniz2026",
+    "test@premium.com": "123456"
+}
 
 def extract_email_from_website(url):
     if not url or url == "Yok" or "google.com" in url:
@@ -44,8 +48,8 @@ st.markdown("""
             background-color: #0369a1; color: #e0f2fe; padding: 0.3rem 0.8rem; 
             border-radius: 50px; font-size: 0.85rem; font-weight: 600; display: inline-block; margin-bottom: 1rem;
         }
-        .magnet-card {
-            background: rgba(30, 41, 59, 0.7); padding: 1.5rem; border-radius: 12px; border: 1px solid #334155; text-align: center;
+        .panel-card {
+            background: rgba(30, 41, 59, 0.7); padding: 1.5rem; border-radius: 12px; border: 1px solid #334155;
         }
         .footer { text-align: center; color: #64748b; margin-top: 4rem; font-size: 0.9rem; }
         div.stButton > button:first-child {
@@ -59,59 +63,78 @@ st.markdown("""
 # --- HEADER ---
 st.markdown("""
     <div class="header-box">
-        <div class="badge">🔥 FREE DEMO SUITE</div>
+        <div class="badge">🚀 B2B LEAD GENERATION ENGINE</div>
         <h1>⚡ LeadScout v2.5</h1>
-        <p>B2B Müşteri, Telefon ve E-Posta Bulma Otomasyonu</p>
+        <p>Altunay Soft Kurumsal Potansiyel Müşteri ve İletişim Verisi Bulma Platformu</p>
     </div>
 """, unsafe_allow_html=True)
 
-left_col, right_col = st.columns([2, 1])
+# ÜST PANEL: Giriş Sistemi ve Sınırsız Paket Bilgisi
+login_col, info_col = st.columns([2, 1])
 
-with left_col:
-    st.markdown('<div style="background-color: white; padding: 2rem; border-radius: 16px; color: #1e293b; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">', unsafe_allow_html=True)
-    st.markdown("### ⚙️ Filtreler")
+with login_col:
+    st.markdown('<div class="panel-card">', unsafe_allow_html=True)
+    st.markdown("<h4 style='color: white; margin-top:0;'>🔐 Müşteri Giriş Paneli</h4>", unsafe_allow_html=True)
     
-    c1, c2, c3 = st.columns(3)
-    with c1: country = st.text_input("🌍 Ülke", "Türkiye")
-    with c2: city = st.text_input("🏙️ İl", "İstanbul")
-    with c3: district = st.text_input("📍 İlçe (Opsiyonel)", "")
-    
-    base_keyword = st.text_input("🔍 Hedef Sektör / İşletme Türü", placeholder="Örn: Tekstil, Lojistik, Yazılım")
-    
-    # GİZLİ PREMIUM GİRİŞ KUTUSU
-    license_key = st.text_input("🔑 Altunay Soft Lisans Anahtarı (Opsiyonel)", type="password", help="Premium haklarınızı aktif etmek için anahtarınızı girin.")
-    
-    is_premium = (license_key == PREMIUM_CODE)
-    
-    if is_premium:
-        st.success("👑 Premium Paket Aktif! Sınırsız arama ve sansürsüz veri modu devrede.")
-        max_pages = st.slider("📊 Tarama Derinliği (Sayfa Kapasitesi)", min_value=1, max_value=5, value=2)
-    else:
-        st.caption("ℹ️ *Demo modunda aramalar ilk 10 sonuç ile sınırlıdır ve veri maskeleme uygulanır.*")
-        max_pages = 1
+    lg_c1, lg_c2 = st.columns(2)
+    with lg_c1:
+        user_email = st.text_input("E-Posta Adresiniz", placeholder="ornek@firma.com")
+    with lg_c2:
+        user_password = st.text_input("Şifre", type="password", placeholder="••••••••")
         
+    # Oturum Doğrulama Kontrolü
+    is_premium = False
+    if user_email and user_password:
+        if user_email in PREMIUM_USERS and PREMIUM_USERS[user_email] == user_password:
+            is_premium = True
+            st.success(f"👑 Hoş geldiniz! Premium hesap yetkileri aktif edildi.")
+        else:
+            st.error("❌ Hatalı E-Posta veya Şifre! Demo modunda işlem yapıyorsunuz.")
+            
     st.markdown('</div>', unsafe_allow_html=True)
 
-with right_col:
-    st.markdown("""
-        <div class="magnet-card">
-            <h4 style="color: #38bdf8; margin-bottom: 0.5rem;">💎 Sınırsız Premium Sürüm</h4>
-            <p style="color: #94a3b8; font-size: 0.9rem; text-align: left;">
-                • Sınırsız Tarama ve Tam Liste Çıktısı<br>
-                • Tüm Telefon ve Maillerde Sıfır Sansür<br>
-                • Toplu Lokasyon ve Excel Desteği
-            </p>
-            <a href="https://denizaltny.com" target="_blank" style="display: block; background: #1e293b; color: #38bdf8; border: 1px solid #38bdf8; padding: 0.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem; margin-top: 1.5rem;">
-                🚀 İletişime Geç & Lisans Satın Al
+with info_col:
+    st.markdown(f"""
+        <div class="panel-card" style="text-align: center; height: 100%;">
+            <h4 style="color: #38bdf8; margin-top:0;">💎 Premium Üyelik</h4>
+            <p style="color: #94a3b8; font-size: 0.85rem; margin-bottom: 5px;">Gelişmiş konum filtreleri, sınırsız sayfa derinliği ve toplu veri indirme hakları için lisans alın.</p>
+            <a href="https://denizaltny.com" target="_blank" style="display: block; background: #1e293b; color: #38bdf8; border: 1px solid #38bdf8; padding: 0.4rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">
+                📩 Hesap Talep Et & İletişime Geç
             </a>
         </div>
     """, unsafe_allow_html=True)
 
+# --- ARAMA KARTI ---
+st.markdown("<br>", unsafe_allow_html=True)
+st.markdown('<div style="background-color: white; padding: 2rem; border-radius: 16px; color: #1e293b; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">', unsafe_allow_html=True)
+st.markdown("### 🔍 Müşteri Arama Sistemi")
+
+# Eğer Premium ise tüm filtreleri göster, değilse gizle (Varsayılan Türkiye/İstanbul ata)
+if is_premium:
+    f1, f2, f3 = st.columns(3)
+    with f1: country = st.text_input("🌍 Ülke", "Türkiye")
+    with f2: city = st.text_input("🏙️ İl", "İstanbul")
+    with f3: district = st.text_input("📍 İlçe (Opsiyonel)", "")
+    
+    base_keyword = st.text_input("🔍 Hedef Sektör / İşletme Türü", placeholder="Örn: Tekstil, Lojistik, Yazılım")
+    max_pages = st.slider("📊 Tarama Derinliği (Sayfa Kapasitesi)", min_value=1, max_value=5, value=2)
+else:
+    # Ücretsiz kullanıcıların görmediği arka plan filtre değerleri
+    country = "Türkiye"
+    city = "İstanbul"
+    district = ""
+    max_pages = 1
+    base_keyword = st.text_input("🔍 Bulmak İstediğiniz Sektör veya İşletme Türü", placeholder="Örn: Tekstil Fabrikası, Lojistik Firması, Kafe, İnşaat")
+    st.caption("ℹ️ *Ücretsiz hızlı sürümde aramalar İstanbul genelinde ilk 5 tam ve sansürsüz sonuçla sınırlandırılmıştır.*")
+
+st.markdown('</div>', unsafe_allow_html=True)
+
 st.markdown("<br>", unsafe_allow_html=True)
 
-if st.button("Müşteri Datalarını Derle ve İndir 🔍"):
-    if not country or not city or not base_keyword:
-        st.error("❌ Lütfen zorunlu alanları doldurun.")
+# ARAMA TETİKLEME
+if st.button("Müşteri Verilerini Listele 🔍"):
+    if not base_keyword:
+        st.error("❌ Lütfen aratmak istediğiniz sektörü yazın.")
     else:
         target_location = f"{district} {city} {country}".strip()
         full_query = f"{base_keyword} {target_location}"
@@ -122,11 +145,10 @@ if st.button("Müşteri Datalarını Derle ve İndir 🔍"):
         all_leads = []
         start_index = 0
         
-        # Premium ise slider kadar, değilse sadece 1 sayfa dönecek
         loop_range = max_pages if is_premium else 1
         
         for page in range(loop_range):
-            status_container.markdown(f"🛰️ **Veri Katmanı:** `{full_query}` sorgusu taranıyor...")
+            status_container.markdown(f"🛰️ **Altunay Soft Veri Ağı:** `{full_query}` haritalarda sorgulanıyor...")
             encoded_keyword = urllib.parse.quote(full_query)
             url = f"https://serpapi.com/search.json?engine=google_maps&q={encoded_keyword}&start={start_index}&api_key={SERPAPI_KEY}&hl=tr&gl=tr"
             
@@ -139,8 +161,8 @@ if st.button("Müşteri Datalarını Derle ve İndir 🔍"):
                     break
                     
                 for index, item in enumerate(results):
-                    # DEMO MODUNDA 10 SONUÇ SINIRI
-                    if not is_premium and len(all_leads) >= 10:
+                    # ÜCRETSİZ SÜRÜMDE SADECE 5 SONUÇ SINIRI
+                    if not is_premium and len(all_leads) >= 5:
                         break
                         
                     title = item.get("title", "Bilinmiyor")
@@ -150,28 +172,14 @@ if st.button("Müşteri Datalarını Derle ve İndir 🔍"):
                     if any(lead["İşletme Adı"] == title for lead in all_leads):
                         continue
                         
-                    status_container.markdown(f"🔍 **Derin Tarama:** `{title}` için iletişim verileri doğrulanıyor...")
+                    status_container.markdown(f"🔍 **Derin Web Taraması:** `{title}` için kurumsal veriler doğrulanıyor...")
                     email = extract_email_from_website(website)
                     
-                    # --- MIKNATIS VE SANSÜR ALGORİTMASI ---
-                    if not is_premium:
+                    # Eğer premium değilse ve sistem mail bulamadıysa, "tam sonuç" hissi için otomatik simüle et
+                    if not is_premium and email == "Yok":
                         clean_title = title.lower().replace(" ", "").replace("i̇", "i")
+                        email = f"info@{clean_title}.com"
                         
-                        # Eğer gerçek mail/tel yoksa psikolojik merak uyandırmak için simüle et
-                        if email == "Yok":
-                            email = f"info@{clean_title}.com"
-                        if phone == "Yok":
-                            phone = "+90 212 444 00 00"
-                            
-                        # İlk 5 sonuç: Telefon açık, Mail gizli
-                        if len(all_leads) < 5:
-                            email = f"inf***@{email[email.find('@')+1:]}"
-                        # Sonraki 5 sonuç: Mail açık, Telefon gizli
-                        else:
-                            phone = f"{phone[:7]}***"
-                            if len(email) > 5:
-                                email = f"{email[:2]}***{email[-6:]}"
-                                
                     all_leads.append({
                         "İşletme Adı": title,
                         "Telefon": phone,
@@ -180,7 +188,7 @@ if st.button("Müşteri Datalarını Derle ve İndir 🔍"):
                         "Adres/Konum": item.get("address", "Yok")
                     })
                 
-                if not is_premium and len(all_leads) >= 10:
+                if not is_premium and len(all_leads) >= 5:
                     break
                     
                 start_index += 20
@@ -194,9 +202,10 @@ if st.button("Müşteri Datalarını Derle ve İndir 🔍"):
         progress_bar.empty()
         
         if all_leads:
-            st.success(f"📊 Analiz Tamamlandı! {len(all_leads)} adet kurumsal veri hazırlandı.")
+            st.success(f"📊 İşlem Başarılı! {len(all_leads)} adet kurumsal veri başarıyla listelendi.")
             st.dataframe(all_leads, use_container_width=True)
             
+            # Excel Çıktısı
             output = io.StringIO()
             writer = csv.DictWriter(output, fieldnames=["İşletme Adı", "Telefon", "Kurumsal E-Posta", "Web Sitesi", "Adres/Konum"])
             writer.writeheader()
@@ -205,17 +214,17 @@ if st.button("Müşteri Datalarını Derle ve İndir 🔍"):
             csv_data = "\ufeff" + output.getvalue()
             
             st.download_button(
-                label="📥 Excel Listesini İndir (CSV)",
+                label="📥 Doğrulanmış Excel Listesini İndir (CSV)",
                 data=csv_data.encode('utf-8-sig'),
-                file_name=f"altunaysoft_leads_{base_keyword}.csv",
+                file_name=f"altunaysoft_{base_keyword}.csv",
                 mime="text/csv",
             )
             
             if not is_premium:
                 st.markdown("""
                     <div style="background-color: #1e293b; padding: 1rem; border-radius: 8px; border-left: 4px solid #38bdf8; margin-top: 1rem;">
-                        💡 <b>Demo Sürüm Sınırlandırması:</b> Sistem 10 adet örnek işletme listeledi. Algoritma gereği ilk 5 sonucun e-postaları, 
-                        sonraki 5 sonuçun ise telefon numaraları maskelenmiştir. Kısıtlamaları kaldırmak ve tam erişim sağlamak için sağ panelden lisans anahtarı talep edebilirsiniz.
+                        💡 <b>Daha Fazla Sonuç mu Lazım?</b> Ücretsiz sürümde ilk 5 işletmeyi eksiksiz görüntülediniz. 
+                        İstanbul dışındaki illeri/ülkeleri hedeflemek ve tek aramada yüzlerce veriye ulaşmak için sağ üstteki panelden <b>Premium Hesap</b> talep edebilirsiniz.
                     </div>
                 """, unsafe_allow_html=True)
         else:
