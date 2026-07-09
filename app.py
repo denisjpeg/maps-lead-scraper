@@ -108,7 +108,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- TELEFON VE ŞİFRE DURUMUNU SESSİZCE KONTROL ETME ---
-# (Form yerleşimi altta olsa bile kodun yukarıda is_premium durumunu bilmesi gerekir)
 is_premium = False
 if "user_email_input" in st.session_state and "user_pass_input" in st.session_state:
     e = st.session_state["user_email_input"]
@@ -126,7 +125,7 @@ st.markdown("""
 
 # --- 2. EN ÜSTTEKİ ARAMA MOTORU BÖLÜMÜ ---
 st.markdown('<div class="content-card">', unsafe_allow_html=True)
-st.markdown("<div class="section-title">🔍 Müşteri ve İletişim Verisi Bulma Sistemi</div>", unsafe_allow_html=True)
+st.markdown("<div class='section-title'>🔍 Müşteri ve İletişim Verisi Bulma Sistemi</div>", unsafe_allow_html=True)
 
 if is_premium:
     st.markdown("<span style='color: #22c55e; font-weight: 700; font-size: 0.9rem;'>👑 PREMIUM YETKİLERİ AKTİF (Sınırsız Bölge Modu)</span>", unsafe_allow_html=True)
@@ -136,7 +135,7 @@ if is_premium:
     with f3: district = st.text_input("📍 İlçe Filtresi (Opsiyonel)", "")
     
     base_keyword = st.text_input("💼 Sektör / Anahtar Kelime", placeholder="Örn: Tekstil Fabrikası, Lojistik, Yazılım Şirketi")
-    max_pages = st.slider("📊 Tarama Derinliği (Sayfa Sayısı)", min_value=1, max_value=5, value=2, help="Her sayfa yaklaşık 20 firmayı derinlemesine kazır.")
+    max_pages = st.slider("📊 Tarama Derinliği (Sayfa Sayısı)", min_value=1, max_value=5, value=2)
 else:
     country = "Türkiye"
     city = "İstanbul"
@@ -166,7 +165,6 @@ with bottom_left:
         
     if u_email and u_pass:
         if u_email in PREMIUM_USERS and PREMIUM_USERS[u_email] == u_pass:
-            # Eğer kullanıcı yeni giriş yaptıysa sayfayı yenileyip yukarıdaki filtreleri tetiklemesi için
             if not is_premium:
                 st.rerun()
         else:
@@ -175,7 +173,7 @@ with bottom_left:
     st.markdown('</div>', unsafe_allow_html=True)
 
 with bottom_right:
-    st.markdown(f"""
+    st.markdown("""
         <div class="premium-promo">
             <h4 style="color: #38bdf8; margin-top:0; font-weight: 700; font-size: 1.1rem; margin-bottom: 0.4rem;">💎 Kurumsal Enterprise Lisans</h4>
             <p style="color: #94a3b8; font-size: 0.8rem; margin-bottom: 0px; line-height: 1.4;">Sınırsız sayfa derinliği, global ülke/il otomasyonu ve sansürsüz veri indirme hakları için bizimle entegre olun.</p>
@@ -257,7 +255,6 @@ if search_triggered:
             st.success(f"📊 Analiz Başarılı! {len(all_leads)} kurumsal firma verisi listelendi.")
             st.dataframe(all_leads, use_container_width=True)
             
-            # Excel Oluşturma
             output = io.StringIO()
             writer = csv.DictWriter(output, fieldnames=["İşletme Adı", "Telefon", "Kurumsal E-Posta", "Web Sitesi", "Adres/Konum"])
             writer.writeheader()
