@@ -84,7 +84,7 @@ st.markdown("""
 st.markdown("""
     <div class="header-box">
         <h1>⚡ LeadScout v2.5</h1>
-        <p>Altunay Soft • AI-Powered B2B Lead Generation & Email Extraction Engine</p>
+        <p>Altunay Soft • AI-Powered B2B Lead Generation & Extraction Engine</p>
     </div>
 """, unsafe_allow_html=True)
 
@@ -144,7 +144,7 @@ if st.button("Sistem Taramasını Başlat"):
                     if any(lead["İşletme Adı"] == title for lead in all_leads):
                         continue
                     
-                    status_container.markdown(f"🔍 **Derin Web Taraması:** `{title}` firmasının e-posta adresi sorgulanıyor...")
+                    status_container.markdown(f"🔍 **Derin Web Taraması:** `{title}` firması sorgulanıyor...")
                     email = extract_email_from_website(website)
                         
                     all_leads.append({
