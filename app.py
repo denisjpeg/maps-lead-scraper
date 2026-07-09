@@ -197,6 +197,9 @@ if st.button("Sistem Taramasını Başlat"):
 st.markdown("""
     <div class="footer">
         <hr style="border-color: #e2e8f0;">
-        © 2026 Altunay Soft Data Analytics Suite • Tüm Hakları Saklıdır.
+        © 2026 Altunay Soft Data Analytics Suite • Tüm Hakları Saklıdır.<br>
+        <span style="font-size: 0.8rem; color: #94a3b8;">
+            Powered by <a href="https://denizaltny.com" target="_blank" style="color: #38bdf8; text-decoration: none; font-weight: 600;">Deniz</a>
+        </span>
     </div>
 """, unsafe_allow_html=True)
