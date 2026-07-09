@@ -168,8 +168,8 @@ async function startScrape() {
 
   try {
     // 👑 BURAYA PYTHON API'Nİ YAYINLADIĞINDA ALACAĞIN HEDEF URL'Yİ YAZACAKSIN
-    // Örn: https://altunay-soft-api.onrender.com/api/scrape
-    const response = await fetch("https://denizaltny-maps-lead-scraper.streamlit.app/api/scrape", {
+    //Örn:  https://altunay-soft-api.onrender.com/api/scrape
+    const response = await fetch("https://altunay-soft-api.onrender.com", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
