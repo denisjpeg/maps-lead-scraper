@@ -13,13 +13,13 @@ from pydantic import BaseModel, Field
 
 app = FastAPI(title="Altunay Soft LeadScout API")
 
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 # 🔐 GİZLİ BİLGİLER — artık kaynak kodunda değil, ortam değişkenlerinde.
 # Render / sunucu panelinden şu değişkenleri tanımlaman gerekiyor:
 #   SERPAPI_KEY        -> SerpAPI anahtarın
 #   PREMIUM_USERS       -> "eposta1:sifre1,eposta2:sifre2" formatında
 #   ALLOWED_ORIGINS     -> "https://siten.com,https://www.siten.com" formatında
-# ---------------------------------------------------------------------------
+# --------------------------------------------------------------------------
 
 SERPAPI_KEY = os.environ.get("SERPAPI_KEY")
 if not SERPAPI_KEY:
