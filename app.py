@@ -103,6 +103,32 @@ def extract_email(url: str) -> str:
     return "Yok"
 
 
+def build_maps_link(item: dict, title: str, address: str) -> str:
+    """
+    Her firma için doğrudan Google Maps'e giden bir link üretir.
+    Öncelik sırası:
+      1) SerpAPI'nin döndürdüğü place_id -> en kesin/doğru sonuç
+      2) gps_coordinates (enlem/boylam) -> koordinat üzerinden arama
+      3) Firma adı + adres metni -> Google Maps'te düz metin araması (garanti fallback)
+    Bu link ücretsiz/premium ayrımı yapmadan tüm kullanıcılara gönderilir,
+    çünkü ekstra kazınmış bir veri değil, zaten ekranda görünen ad+adresle
+    Google Maps'i açan bir yönlendirmedir.
+    """
+    place_id = item.get("place_id")
+    if place_id:
+        return f"https://www.google.com/maps/place/?q=place_id:{place_id}"
+
+    gps = item.get("gps_coordinates") or {}
+    lat = gps.get("latitude")
+    lng = gps.get("longitude")
+    if lat is not None and lng is not None:
+        query = urllib.parse.quote(f"{lat},{lng}")
+        return f"https://www.google.com/maps/search/?api=1&query={query}"
+
+    fallback_query = urllib.parse.quote(f"{title} {address}".strip())
+    return f"https://www.google.com/maps/search/?api=1&query={fallback_query}"
+
+
 @app.get("/api/health")
 async def health():
     return {"status": "ok"}
@@ -161,12 +187,15 @@ async def scrape_leads(req: SearchRequest, request: Request):
         # tahmini/uydurma bir e-posta üretilmez. Bulunamazsa "Yok" döner.
         email = extract_email(raw_website) if is_premium else "Yok"
 
+        address = item.get("address", "Yok")
+
         all_leads.append({
             "title": title,
             "phone": phone,
             "email": email,
             "website": website,
-            "address": item.get("address", "Yok"),
+            "address": address,
+            "maps_link": build_maps_link(item, title, address),
         })
 
         if not is_premium and len(all_leads) >= 5:
