@@ -244,7 +244,7 @@
         <b>Standard plan limit:</b> The first 5 results are shown. Verified email and website data are locked. Sign in with a Business (Premium) account to access up to 20 results, with no city/district restrictions, and see all email and website data.
       </div>
 
-      <button onclick="exportCSV()" class="btn btn-ghost" style="width: 100%; margin-top: 12px; border-color: var(--success); color: var(--success);">Download Excel List (CSV)</button>
+      <button onclick="exportExcel()" class="btn btn-ghost" style="width: 100%; margin-top: 12px; border-color: var(--success); color: var(--success);">Download Excel List (.xlsx)</button>
     </div>
   </div>
 
@@ -259,6 +259,7 @@
   </div>
 </section>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
 let leadsData = [];
 const API_URL = "https://altunay-soft-api.onrender.com/api/scrape";
@@ -336,9 +337,14 @@ async function runScraper() {
               : 'None')
           : lockedCell;
 
+        const mapsHref = lead.maps_link ? encodeURI(lead.maps_link) : null;
+        const titleCell = mapsHref
+          ? `<a href="${mapsHref}" target="_blank" rel="noopener" style="color:#fff; text-decoration:underline; text-decoration-color:var(--line-strong);"><b>${escapeHtml(lead.title)}</b></a>`
+          : `<b>${escapeHtml(lead.title)}</b>`;
+
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td><b>${escapeHtml(lead.title)}</b></td>
+          <td>${titleCell}</td>
           <td>${escapeHtml(lead.phone)}</td>
           <td>${escapeHtml(lead.address)}</td>
           <td>${emailCell}</td>
@@ -372,23 +378,40 @@ function escapeHtml(str) {
     .replace(/"/g, "&quot;");
 }
 
-function exportCSV() {
-  let csv = "\ufeffBusiness Name,Phone,Address,Email,Website\n";
-  leadsData.forEach(l => {
-    const row = [l.title, l.phone, l.address, l.email, l.website]
-      .map(v => `"${String(v ?? '').replace(/"/g, '""')}"`)
-      .join(",");
-    csv += row + "\n";
-  });
-  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "leadscout_export.csv";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+function exportExcel() {
+  if (!leadsData.length) {
+    alert("There is no data to export yet. Please run a search first.");
+    return;
+  }
+
+  const header = ["Business Name", "Phone", "Address", "Email", "Website", "Maps Link"];
+  const rows = leadsData.map(l => [
+    l.title ?? "",
+    l.phone ?? "",
+    l.address ?? "",
+    l.email ?? "",
+    l.website ?? "",
+    l.maps_link ?? ""
+  ]);
+
+  // Gerçek bir çalışma sayfası (worksheet) üretiyoruz; her değer kendi
+  // hücresine yazılır, bu yüzden Excel'in yerel ayarları (virgül/noktalı
+  // virgül ayracı) sonucu hiç etkilemez — sütunlar her zaman yan yana
+  // ve doğru hizalanmış çıkar.
+  const worksheet = XLSX.utils.aoa_to_sheet([header, ...rows]);
+
+  worksheet['!cols'] = [
+    { wch: 32 }, // Business Name
+    { wch: 16 }, // Phone
+    { wch: 40 }, // Address
+    { wch: 28 }, // Email
+    { wch: 28 }, // Website
+    { wch: 42 }  // Maps Link
+  ];
+
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "LeadScout");
+  XLSX.writeFile(workbook, "leadscout_export.xlsx");
 }
 </script>
 
